@@ -20,7 +20,7 @@ class UzsakymoEiluteAdmin(admin.ModelAdmin):
     # )
 
 class UzsakymasAdmin(admin.ModelAdmin):
-    list_display = ('automobilis', 'data')
+    list_display = ('automobilis', 'data', 'suma')
     inlines = [UzsakymoEiluteInLine]
 
 

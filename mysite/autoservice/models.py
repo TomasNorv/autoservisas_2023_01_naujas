@@ -42,6 +42,13 @@ class Uzsakymas(models.Model):
     data = models.DateTimeField(verbose_name="Data", auto_now_add=True)
     automobilis = models.ForeignKey(to="Automobilis", on_delete=models.CASCADE)
 
+    def suma(self):
+        suma = 0
+        eilutes = self.eilutes.all()
+        for eilute in eilutes:
+            suma += eilute.kaina()
+        return suma
+
     def __str__(self):
         return f"{self.automobilis} ({self.data})"
 
@@ -50,7 +57,7 @@ class Uzsakymas(models.Model):
         verbose_name_plural = 'Užsakymai'
 
 class UzsakymoEilute(models.Model):
-    uzsakymas = models.ForeignKey(to="Uzsakymas", on_delete=models.CASCADE)
+    uzsakymas = models.ForeignKey(to="Uzsakymas", on_delete=models.CASCADE, related_name="eilutes")
     paslauga = models.ForeignKey(to="Paslauga", on_delete=models.SET_NULL, null=True)
     kiekis = models.IntegerField(verbose_name="Kiekis")
 
