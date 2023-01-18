@@ -13,6 +13,12 @@ class UzsakymoEiluteInLine(admin.TabularInline):
     extra = 0
 
 
+class UzsakymoEiluteAdmin(admin.ModelAdmin):
+    list_display = ('uzsakymas', 'paslauga', 'kiekis', 'kaina')
+    # fieldsets = (
+    #     ('General', {'fields': ('uzsakymas', 'paslauga', 'kiekis', 'kaina')}),
+    # )
+
 class UzsakymasAdmin(admin.ModelAdmin):
     list_display = ('automobilis', 'data')
     inlines = [UzsakymoEiluteInLine]
@@ -31,4 +37,4 @@ admin.site.register(Automobilis, AutomobilisAdmin)
 admin.site.register(AutomobilioModelis)
 admin.site.register(Paslauga, PaslaugaAdmin)
 admin.site.register(Uzsakymas, UzsakymasAdmin)
-admin.site.register(UzsakymoEilute)
+admin.site.register(UzsakymoEilute, UzsakymoEiluteAdmin)

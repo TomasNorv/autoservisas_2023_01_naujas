@@ -54,6 +54,9 @@ class UzsakymoEilute(models.Model):
     paslauga = models.ForeignKey(to="Paslauga", on_delete=models.SET_NULL, null=True)
     kiekis = models.IntegerField(verbose_name="Kiekis")
 
+    def kaina(self):
+        return self.paslauga.kaina * self.kiekis
+
     def __str__(self):
         return f"{self.uzsakymas.data}, {self.paslauga} ({self.kiekis})"
 
