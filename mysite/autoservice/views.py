@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Paslauga, Automobilis, Uzsakymas
 
 # Create your views here.
@@ -21,3 +21,11 @@ def automobiliai(request):
         'automobiliai': automobiliai,
     }
     return render(request, 'automobiliai.html', context=context)
+
+
+def automobilis(request, auto_id):
+    automobilis = get_object_or_404(Automobilis, pk=auto_id)
+    context = {
+        'automobilis': automobilis,
+    }
+    return render(request, "automobilis.html", context=context)
