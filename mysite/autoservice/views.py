@@ -13,3 +13,11 @@ def index(request):
         "atliktu_uzsakymu_kiekis": atliktu_uzsakymu_kiekis,
     }
     return render(request, 'index.html', context=kontekstas)
+
+
+def automobiliai(request):
+    automobiliai = Automobilis.objects.all()
+    context = {
+        'automobiliai': automobiliai,
+    }
+    return render(request, 'automobiliai.html', context=context)

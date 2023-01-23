@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Automobiliai{% endblock %}
+
+{% block content %}
+<h1>Automobiliai:</h1>
+{% for automobilis in automobiliai %}
+<hr>
+<p>{{ automobilis }}</p>
+{% endfor %}
+{% endblock %}
