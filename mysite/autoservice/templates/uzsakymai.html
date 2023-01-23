@@ -4,6 +4,6 @@
 {% block content %}
 {% for uzsakymas in uzsakymai %}
 <hr>
-<p>{{ uzsakymas }}</p>
+<p><a href="{{ uzsakymas.pk }}">{{ uzsakymas }}</a></p>
 {% endfor %}
 {% endblock %}
