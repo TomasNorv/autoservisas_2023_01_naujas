@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime
 import pytz
+from tinymce.models import HTMLField
 
 utc = pytz.UTC
 
@@ -24,6 +25,7 @@ class Automobilis(models.Model):
     klientas = models.CharField(verbose_name="Klientas", max_length=100)
     automobilio_modelis = models.ForeignKey(to=AutomobilioModelis, on_delete=models.SET_NULL, null=True)
     photo = models.ImageField('Nuotrauka', upload_to='automobiliai', null=True)
+    aprasymas = HTMLField(verbose_name="Aprašymas", null=True, blank=True)
 
     def __str__(self):
         return f"{self.automobilio_modelis} ({self.valstybinis_nr})"
