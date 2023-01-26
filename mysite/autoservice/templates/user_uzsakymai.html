@@ -5,7 +5,7 @@
 <h1>Mano užsakymai:</h1>
 {% for uzsakymas in uzsakymai %}
 <hr>
-<p><a href="{% url 'uzsakymas' uzsakymas.pk %}">{{ uzsakymas }}</a></p>
+<p><a class="{% if uzsakymas.ar_praejo_terminas %}text-danger{% endif %}" href="{% url 'uzsakymas' uzsakymas.pk %}">{{ uzsakymas }}</a></p>
 {% endfor %}
 <div class="pagination">
     <span class="step-links">

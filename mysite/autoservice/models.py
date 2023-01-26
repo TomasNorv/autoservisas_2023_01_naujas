@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 import datetime
+import pytz
+
+utc = pytz.UTC
 
 # Create your models here.
 class AutomobilioModelis(models.Model):
@@ -48,7 +51,7 @@ class Uzsakymas(models.Model):
 
     def ar_praejo_terminas(self):
         if self.terminas:
-            return self.terminas < datetime.datetime.today()
+            return self.terminas.replace(tzinfo=utc) < datetime.datetime.today().replace(tzinfo=utc)
         else:
             return False
 
@@ -75,7 +78,7 @@ class Uzsakymas(models.Model):
         return suma
 
     def __str__(self):
-        return f"{self.automobilis} ({self.data})"
+        return f"{self.automobilis} ({self.terminas})"
 
     class Meta:
         verbose_name = 'Užsakymas'
