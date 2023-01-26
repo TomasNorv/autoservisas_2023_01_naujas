@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 # Create your models here.
 class AutomobilioModelis(models.Model):
@@ -42,6 +42,7 @@ class Paslauga(models.Model):
 class Uzsakymas(models.Model):
     data = models.DateTimeField(verbose_name="Data", auto_now_add=True)
     automobilis = models.ForeignKey(to="Automobilis", on_delete=models.CASCADE)
+    vartotojas = models.ForeignKey(to=User, verbose_name="Vartotojas", on_delete=models.SET_NULL, null=True, blank=True)
 
     LOAN_STATUS = (
         ('p', 'Patvirtinta'),
