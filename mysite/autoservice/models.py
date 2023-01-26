@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 # Create your models here.
 class AutomobilioModelis(models.Model):
@@ -44,6 +45,12 @@ class Uzsakymas(models.Model):
     terminas = models.DateTimeField(verbose_name="Terminas", null=True)
     automobilis = models.ForeignKey(to="Automobilis", on_delete=models.CASCADE)
     vartotojas = models.ForeignKey(to=User, verbose_name="Vartotojas", on_delete=models.SET_NULL, null=True, blank=True)
+
+    def ar_praejo_terminas(self):
+        if self.terminas:
+            return self.terminas < datetime.datetime.today()
+        else:
+            return False
 
     LOAN_STATUS = (
         ('p', 'Patvirtinta'),
