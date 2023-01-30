@@ -100,3 +100,15 @@ class UzsakymoEilute(models.Model):
     class Meta:
         verbose_name = 'Užsakymo eilutė'
         verbose_name_plural = 'Užsakymo eilutės'
+
+
+class Komentaras(models.Model):
+    uzsakymas = models.ForeignKey('Uzsakymas', verbose_name='Užsakymas', on_delete=models.SET_NULL, null=True, blank=True, related_name="komentarai")
+    vartotojas = models.ForeignKey(to=User, on_delete=models.SET_NULL, null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    tekstas = models.TextField(verbose_name='Tekstas', max_length=2000)
+
+    class Meta:
+        verbose_name = "Komentaras"
+        verbose_name_plural = 'Komentarai'
+        ordering = ['-date_created']

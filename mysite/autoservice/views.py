@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, reverse
 from .models import Paslauga, Automobilis, Uzsakymas
 from django.views import generic
 from django.core.paginator import Paginator
@@ -6,7 +6,8 @@ from django.db.models import Q
 from django.contrib.auth.forms import User
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
-
+from django.views.generic.edit import FormMixin
+from .forms import UzsakymasKomentarasForm
 
 # Create your views here.
 def index(request):
@@ -50,10 +51,31 @@ class UzsakymasListView(generic.ListView):
     context_object_name = "uzsakymai"
 
 
-class UzsakymasDetailView(generic.DetailView):
+class UzsakymasDetailView(generic.DetailView, FormMixin):
     model = Uzsakymas
     template_name = "uzsakymas.html"
     context_object_name = "uzsakymas"
+    form_class = UzsakymasKomentarasForm
+
+    def get_success_url(self):   # nurodome, kur atsidursime komentaro sėkmės atveju.
+        return reverse('uzsakymas', kwargs={'pk': self.object.id})
+
+    def post(self, request, *args, **kwargs):  # standartinis post metodo perrašymas, naudojant FormMixin, galite kopijuoti tiesiai į savo projektą.
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):  # štai čia nurodome, kad knyga bus būtent ta, po kuria komentuojame, o vartotojas bus tas, kuris yra prisijungęs.
+        form.instance.uzsakymas = self.object
+        form.instance.vartotojas = self.request.user
+        form.save()
+        return super().form_valid(form)
+
+
+
 
 
 def search(request):
