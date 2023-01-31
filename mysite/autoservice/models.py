@@ -112,3 +112,12 @@ class Komentaras(models.Model):
         verbose_name = "Komentaras"
         verbose_name_plural = 'Komentarai'
         ordering = ['-date_created']
+
+class Profilis(models.Model):
+        user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profilis')
+        nuotrauka = models.ImageField(default="profile_pics/default.png", upload_to="profile_pics")
+
+        def __str__(self):
+            return f"{self.user.username} profilis"
+
+
