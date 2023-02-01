@@ -9,6 +9,8 @@ from django.contrib import messages
 from django.views.generic.edit import FormMixin
 from .forms import UzsakymasKomentarasForm, UserUpdateForm, ProfilisUpdateForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 # Create your views here.
 def index(request):
     paslaugu_kiekis = Paslauga.objects.count()
@@ -94,6 +96,35 @@ class UserUzsakymasListView(generic.ListView):
 
     def get_queryset(self):
         return Uzsakymas.objects.filter(vartotojas=self.request.user)
+
+class UzsakymasCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Uzsakymas
+    fields = ['terminas', 'automobilis', "status"]
+    success_url = "/autoservice/manouzsakymai/"
+    template_name = 'uzsakymas_form.html'
+
+
+    def form_valid(self, form):
+        form.instance.vartotojas = self.request.user
+        return super().form_valid(form)
+
+class UserUzsakymasUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+    model = Uzsakymas
+    fields = ['terminas', 'automobilis', "status"]
+    #success_url = "/autoservice/manouzsakymai/"
+    template_name = 'uzsakymas_form.html'
+
+    def get_success_url(self):
+        return reverse ('uzsakymas', kwargs={'pk': self.object.id})
+
+    def form_valid(self, form):
+        form.instance.vartotojas = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        uzsakymas = self.get_object()
+        return self.request.user == uzsakymas.vartotojas
+
 
 
 @csrf_protect
