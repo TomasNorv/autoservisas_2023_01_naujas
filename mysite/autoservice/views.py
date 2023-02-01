@@ -7,7 +7,7 @@ from django.contrib.auth.forms import User
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.views.generic.edit import FormMixin
-from .forms import UzsakymasKomentarasForm, UserUpdateForm, ProfilisUpdateForm
+from .forms import UzsakymasKomentarasForm, UserUpdateForm, ProfilisUpdateForm, UzsakymasCreateUpdateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
@@ -99,9 +99,10 @@ class UserUzsakymasListView(generic.ListView):
 
 class UzsakymasCreateView(LoginRequiredMixin, generic.CreateView):
     model = Uzsakymas
-    fields = ['terminas', 'automobilis', "status"]
+    #fields = ['terminas', 'automobilis', "status"]
     success_url = "/autoservice/manouzsakymai/"
     template_name = 'uzsakymas_form.html'
+    form_class = UzsakymasCreateUpdateForm
 
 
     def form_valid(self, form):
@@ -125,7 +126,16 @@ class UserUzsakymasUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.U
         uzsakymas = self.get_object()
         return self.request.user == uzsakymas.vartotojas
 
+class UserUzsakymasDeleteView(LoginRequiredMixin,UserPassesTestMixin, generic.DeleteView):
+    model = Uzsakymas
+    fields = ['terminas', 'automobilis', "status"]
+    success_url = "/autoservice/manouzsakymai/"
+    template_name = 'user_uzsakymas_delete.html'
+    context_object_name = 'uzsakymas'
 
+    def test_func(self):
+        uzsakymas = self.get_object()
+        return self.request.user == uzsakymas.vartotojas
 
 @csrf_protect
 def register(request):
