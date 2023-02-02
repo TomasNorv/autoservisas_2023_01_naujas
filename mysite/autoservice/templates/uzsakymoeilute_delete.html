@@ -1,17 +1,17 @@
 {% extends "base.html" %}
-{% block title %}Usakymo trynimas{% endblock %}
+{% block title %}Usakymo eilutes trynimas{% endblock %}
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="content-section">
     <form method="POST">
         {% csrf_token %}
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Ištrinti uzsakyma</legend>
-            <h2>Ar tikrai norite ištrinti uzsakymas {{ uzsakymas }}?</h2>
+            <legend class="border-bottom mb-4">Ištrinti uzsakymo eilute</legend>
+            <h2>Ar tikrai norite ištrinti uzsakymo eilute {{ uzsakymoeilute }}?</h2>
         </fieldset>
         <div class="form-group">
             <button class="btn btn-outline-danger" type="submit">Taip, ištrinti</button>
-            <a class="btn btn-outline-secondary" href="{% url 'uzsakymas' uzsakymas.id %}">Atšaukti</a>
+            <a class="btn btn-outline-secondary" href="{% url 'uzsakymas' uzsakymoeilute.uzsakymas.id %}">Atšaukti</a>
         </div>
     </form>
     </div>
