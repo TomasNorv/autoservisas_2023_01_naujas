@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
-from .models import Paslauga, Automobilis, Uzsakymas
+from .models import Paslauga, Automobilis, Uzsakymas, UzsakymoEilute
 from django.views import generic
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -137,6 +137,38 @@ class UserUzsakymasDeleteView(LoginRequiredMixin,UserPassesTestMixin, generic.De
         uzsakymas = self.get_object()
         return self.request.user == uzsakymas.vartotojas
 
+class UzsakymasEiluteCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
+    model = UzsakymoEilute
+    fields = ['paslauga', 'kiekis']
+    template_name = 'uzsakymoeilute_form.html'
+    def get_success_url(self):
+        return reverse ('uzsakymas', kwargs={'pk': self.kwargs['pk']})
+    def form_valid(self, form):
+        form.instance.uzsakymas = Uzsakymas.objects.get(pk= self.kwargs['pk'])
+        form.save()
+        return super().form_valid(form)
+
+    def test_func(self):
+        uzsakymas = Uzsakymas.objects.get(pk= self.kwargs['pk'])
+        return self.request.user == uzsakymas.vartotojas
+
+
+class UzsakymasEiluteUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+    model = UzsakymoEilute
+    fields = ['paslauga', 'kiekis']
+    template_name = 'uzsakymoeilute_form.html'
+
+    def form_valid(self, form):
+        form.instance.uzsakymas = Uzsakymas.objects.get(pk= self.kwargs['uzsakymas_pk'])
+        form.save()
+        return super().form_valid(form)
+
+    def test_func(self):
+        uzsakymas = Uzsakymas.objects.get(pk=self.kwargs['uzsakymas_pk'])
+        return self.request.user == uzsakymas.vartotojas
+
+    def get_success_url(self):
+        return reverse('uzsakymas', kwargs={'pk': self.kwargs['uzsakymas_pk']})
 @csrf_protect
 def register(request):
     if request.method == "POST":
